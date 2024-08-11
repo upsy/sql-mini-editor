@@ -4,6 +4,7 @@ import { githubLight } from '@uiw/codemirror-theme-github';
 import { sql } from '@codemirror/lang-sql';
 import { CompletionContext, autocompletion, CompletionResult, Completion } from '@codemirror/autocomplete';
 import {  Select, AST, Parser } from 'node-sql-parser';
+import { AlertDestructive } from './alert-destructive';
 
 interface SQLEditorProps {
   allowedTables: string[];
@@ -186,17 +187,20 @@ const SQLMiniEditor: React.FC<SQLEditorProps> = ({ allowedTables, tableColumns }
 
   return (
     <>
-    <CodeMirror
-      value={query}
-      height="200px"
-      extensions={[
-        sql(),
-        autocompletion({ override: [myCompletions] })
-      ]}
-      theme={githubLight}
-      onChange={(value) => validateQuery(value)}
-    />
-    <span>{error}</span>
+    <div className='border mb-2'>
+        <CodeMirror
+        value={query}
+        height="200px"
+        extensions={[
+            sql(),
+            autocompletion({ override: [myCompletions] })
+        ]}
+        theme={githubLight}
+        onChange={(value) => validateQuery(value)}
+        />
+    </div>
+    {/* <span className='text-destructive text-sm'>{error}</span> */}
+    <AlertDestructive>{error}</AlertDestructive>
     </>
   );
 };
