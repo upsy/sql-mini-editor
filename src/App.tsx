@@ -1,6 +1,8 @@
-import SQLMiniEditor from "./components/sql-mini-editor";
-import { Button } from "./components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
+import { SQLMiniEditorCard } from "@/components/sql-mini-editor-card";
+import { QueryResultsCard } from "@/components/query-results-card";
+import { QueryHistoryCard } from "@/components/query-history-card";
+
+
 
 function App() {
 
@@ -11,43 +13,14 @@ function App() {
     products: ['id', 'name', 'price']
   };
 
+
   return (
     <div className="flex p-2 w-full flex-col">
       <div className="flex flex-row gap-2 w-full">
-      <Card className="w-2/3">
-        <CardHeader>
-          <CardTitle>SQL Editor</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <SQLMiniEditor allowedTables={allowedTables} tableColumns={tableColumns} />
-        </CardContent>
-        <CardFooter>
-          <Button>Run Query</Button>
-        </CardFooter>
-      </Card>
-      <Card className="w-1/3">
-        <CardHeader>
-          <CardTitle>Saved History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* <SQLMiniEditor allowedTables={allowedTables} tableColumns={tableColumns} /> */}
-        </CardContent>
-        <CardFooter>
-          {/* <Button>Run Query</Button> */}
-        </CardFooter>
-      </Card>
+        <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
+        <QueryHistoryCard/>
       </div>
-      <Card className="w-full mt-2">
-        <CardHeader>
-          <CardTitle>Query Results</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* <SQLMiniEditor allowedTables={allowedTables} tableColumns={tableColumns} /> */}
-        </CardContent>
-        <CardFooter>
-          <Button variant={"secondary"}>Download</Button>
-        </CardFooter>
-      </Card>
+        <QueryResultsCard />
     </div>
   );
 }

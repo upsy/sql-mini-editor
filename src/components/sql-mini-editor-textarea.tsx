@@ -20,7 +20,7 @@ interface ASTNode {
     as?:ASTNode;
   }
 
-const SQLMiniEditor: React.FC<SQLEditorProps> = ({ allowedTables, tableColumns }) => {
+const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ allowedTables, tableColumns }) => {
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
   const parser = new Parser();
@@ -205,4 +205,4 @@ const SQLMiniEditor: React.FC<SQLEditorProps> = ({ allowedTables, tableColumns }
   );
 };
 
-export default SQLMiniEditor;
+export default SQLMiniEditorTextarea;
