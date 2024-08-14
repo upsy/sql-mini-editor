@@ -7,8 +7,10 @@ import {  Select, AST, Parser } from 'node-sql-parser';
 import { AlertDestructive } from './alert-destructive';
 
 interface SQLEditorProps {
+  currentQuery: string;
   allowedTables: string[];
   tableColumns: Record<string, string[]>;
+  onQueryChange: (newQuery:string)=>void;
 }
 
 interface ASTNode {
@@ -20,7 +22,7 @@ interface ASTNode {
     as?:ASTNode;
   }
 
-const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ allowedTables, tableColumns }) => {
+const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowedTables, tableColumns, onQueryChange }) => {
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
   const parser = new Parser();
@@ -81,6 +83,7 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ allowedTables, tableC
       }
 
       setQuery(value);
+      onQueryChange(value);
       setError('');
     } catch (err) {
         if (err?.name == "SyntaxError"){
@@ -189,7 +192,7 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ allowedTables, tableC
     <>
     <div className='border mb-2'>
         <CodeMirror
-        value={query}
+        value={currentQuery}
         height="200px"
         extensions={[
             sql(),

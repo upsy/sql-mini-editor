@@ -1,0 +1,33 @@
+import { BPMEngine } from "@/types";
+
+export const bpmEngine:BPMEngine = {
+    appendSecurityContext : (url:string)=>url,
+    rewriteURI: (url:string)=>url,
+    callAjaxService: (url:string, args:{params:string, load:(data:unknown)=>void, error: (e:Error)=>void})=>{
+        console.log(">> callAjaxService", url, args);
+
+        const inputObj = JSON.parse(args.params);
+        let serverData:unknown;
+
+        if (inputObj.action == 'RUN_QUERY'){
+            serverData={
+                message:"Query run succesfully!",
+                ok:true,
+                results:[{id:1, name:'Dragos'},{id:2, name:'Maria'}]
+            }
+        }
+
+        if (inputObj.action == 'FETCH_ALL_QUERIES'){
+            serverData={
+                message:"Historical queries retrieved!",
+                ok:true,
+                results:[{query: 'select * from users', created_d:'2024-08-14', user_id:'diatan'}]
+            }
+        }
+
+        setTimeout(()=>{
+            console.log(">> serving ", serverData);
+            args.load(serverData);
+        }, 500)
+    }
+}
