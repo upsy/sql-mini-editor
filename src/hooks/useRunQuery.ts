@@ -8,7 +8,7 @@ import { QueryHistoryItem } from '@/types';
 
 export const useRunQuery = () => {
   const queryClient = useQueryClient();
-  const { setCurrentQuery } = useDashboardStore();
+  const { setCurrentQuery, setQueryResults } = useDashboardStore();
   const { bpmEngine, url } = useDashboardContext();
 
   return useMutation({
@@ -19,8 +19,8 @@ export const useRunQuery = () => {
       console.log('>> run query ednded', data, variables);
 
 
-
-      queryClient.setQueryData(['queryResults'], data.queryResults);
+      setQueryResults(data.queryResults);
+      // queryClient.setQueryData(['queryResults'], data.queryResults);
       // addToQueryHistory({query:variables, created_d:'2024-08-14', user_id:'@you'});
       setCurrentQuery(variables);  // Update current query in store
       queryClient.setQueryData(['queryHistory'],(oldData:Array<QueryHistoryItem>)=>[data.savedQuery, ...oldData]);
