@@ -1,9 +1,9 @@
-1. fix {} any issues
-2. use Zustand for stores
-3. create hooks + Zustand to read data from stores + to generate updates in stores?
-4. use React Query to fetch data (load historical QUERIES)+ mutation to functions that pass data to server ('ACTION' = 'RUN_QUERY', {query:''} => message)
-5. use Toast something to show server response ("Success / Fail")
-6. display results with Tanstack Table/shadcn data-table
-7. force currentQuery update from Historic Card
+6. display results with Tanstack Table/shadcn data-table -> need to update to dataTable
+7. use Toast something to show server response ("Success / Fail")
 8. query/schema overview Tabs
 9. schema overview (https://sqlhabit.github.io/sql_schema_visualizer/databases/nba) / (https://github.com/ayeressian/db-viewer-component)
+10. #fix {} any issues
+11. #use Zustand for stores
+12. #create hooks + Zustand to read data from stores + to generate updates in stores?
+13. #use React Query to fetch data (load historical QUERIES)+ mutation to functions that pass data to server ('ACTION' = 'RUN_QUERY', {query:''} => message)
+14. #force currentQuery update from Historic Card
