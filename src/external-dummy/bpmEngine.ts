@@ -13,7 +13,9 @@ export const bpmEngine:BPMEngine = {
             serverData={
                 message:"Query run succesfully!",
                 ok:true,
-                results:[{id:1, name:'Dragos'},{id:2, name:'Maria'}]
+                resultJSON:`{"queryResults":[{"id":1, "name":"Dragos"},{"id":2, "name":"Maria"}], "savedQuery":{"query":"${JSON.parse(inputObj.payload).newSqlQuery}", "created_d":"2024-08-16", "user_id":"diatan"}}`,
+                
+
             }
         }
 
@@ -21,7 +23,8 @@ export const bpmEngine:BPMEngine = {
             serverData={
                 message:"Historical queries retrieved!",
                 ok:true,
-                results:[{query: 'select * from users', created_d:'2024-08-14', user_id:'diatan'}]
+                resultJSON:'{"allQueries":[{"query": "select * from users", "created_d":"2024-08-14", "user_id":"diatan"}]}'
+                
             }
         }
 

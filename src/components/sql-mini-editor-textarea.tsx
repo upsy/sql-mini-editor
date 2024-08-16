@@ -19,11 +19,10 @@ interface ASTNode {
     left?: ASTNode;
     right?: ASTNode;
     from?: ASTNode[];
-    as?:ASTNode;
+    as?:string;
   }
 
 const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowedTables, tableColumns, onQueryChange }) => {
-  const [query, setQuery] = useState('');
   const [error, setError] = useState('');
   const parser = new Parser();
 
@@ -82,11 +81,10 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
         throw new Error(`Invalid tables used: ${invalidTables.join(', ')}`);
       }
 
-      setQuery(value);
       onQueryChange(value);
       setError('');
     } catch (err) {
-        if (err?.name == "SyntaxError"){
+        if (err instanceof Error && err?.name == "SyntaxError"){
             setError('Invalid Query!');
         }
     //   console.error(err);
@@ -99,7 +97,7 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
   const getTablesFromQuery = (ast: AST | AST[]): { [alias: string]: string } => {
     const tables: { [alias: string]: string } = {};
     
-    const processFrom = (from: any) => {
+    const processFrom = (from:  ASTNode | ASTNode[]) => {
       
       if (Array.isArray(from)) {
         from.forEach(fromItem => processFrom(fromItem));
@@ -116,11 +114,11 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
     if (Array.isArray(ast)) {
       ast.forEach(a => {
         if (a.type === 'select' && a.from) {
-          processFrom(a.from);
+          processFrom(a.from as ASTNode[]);
         }
       });
     } else if (ast.type === 'select' && ast.from) {
-      processFrom(ast.from);
+      processFrom(ast.from as ASTNode[]) ;
     }
 
     return tables;
