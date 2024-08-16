@@ -13,7 +13,7 @@ export const bpmEngine:BPMEngine = {
             serverData={
                 message:"Query run succesfully!",
                 ok:true,
-                resultJSON:`{"queryResults":[{"id":1, "name":"Drago,s","created_d":"2024-05-01"},{"id":2, "name":"M'aria"}], "savedQuery":{"query":"${JSON.parse(inputObj.payload).newSqlQuery}", "created_d":"2024-08-16", "user_id":"diatan"}}`,
+                resultJSON:`{"queryResults":[{"id":1, "name":"Drago,s","created_d":"2024-05-01"},{"id":2, "name":"M'aria", "created_d":"2024-05-02"}], "savedQuery":{"query":"${JSON.parse(inputObj.payload).newSqlQuery}", "created_d":"2024-08-16", "user_id":"diatan"}}`,
                 
 
             }

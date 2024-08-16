@@ -14,7 +14,8 @@ export function QueryResultsCard(){
       <CardTitle>Query Results</CardTitle>
     </CardHeader>
     <CardContent>
-      <QueryResultsTable data={displayResults}></QueryResultsTable>
+      {(!displayResults || displayResults.length === 0) && <p>No results to display.</p>}
+      {displayResults && displayResults[0] && <QueryResultsTable data={displayResults}></QueryResultsTable>}
     </CardContent>
     <CardFooter>
     <DownloadCSVButton data={displayResults} filename="query_results.csv"></DownloadCSVButton>
