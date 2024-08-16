@@ -1,21 +1,23 @@
-import { Button } from "@/components/ui/button";
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboardStore } from "@/store/dashboardStore";
-import {FileDown} from 'lucide-react';
+
+import { QueryResultsTable } from "./query-results-table";
+import { DownloadCSVButton } from "./download-csv-button";
 
 export function QueryResultsCard(){
   const queryResults = useDashboardStore((state)=>state.queryResults);
   console.log(">> render QueryResultsCard", queryResults);
-  const displayResults = queryResults as Array<object>;
+  const displayResults = queryResults as  Record<string, string | number >[];;
     return (<Card className="w-full mt-2">
     <CardHeader>
       <CardTitle>Query Results</CardTitle>
     </CardHeader>
     <CardContent>
-      { displayResults && JSON.stringify(displayResults) }
+      <QueryResultsTable data={displayResults}></QueryResultsTable>
     </CardContent>
     <CardFooter>
-      <Button variant={"secondary"}><FileDown className="w-4 h-4 mr-2"></FileDown>Download CSV</Button>
+    <DownloadCSVButton data={displayResults} filename="query_results.csv"></DownloadCSVButton>
     </CardFooter>
   </Card>);
 }
