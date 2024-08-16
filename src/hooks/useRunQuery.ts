@@ -13,6 +13,9 @@ export const useRunQuery = () => {
 
   return useMutation({
     mutationFn: (query: string) => runQueryService(bpmEngine, url, query),
+    onMutate: ()=>{
+      setQueryResults([]);
+    },
     onSuccess: (data, variables) => {
       
 

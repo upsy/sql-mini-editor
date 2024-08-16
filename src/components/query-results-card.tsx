@@ -12,7 +12,7 @@ export function QueryResultsCard(){
       <CardTitle>Query Results</CardTitle>
     </CardHeader>
     <CardContent>
-      { JSON.stringify(displayResults) }
+      { displayResults && JSON.stringify(displayResults) }
     </CardContent>
     <CardFooter>
       <Button variant={"secondary"}><FileDown className="w-4 h-4 mr-2"></FileDown>Download CSV</Button>
