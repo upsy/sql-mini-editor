@@ -28,7 +28,7 @@ function initializeStartingNodes( dbSchema:TableSchema[] ){
 
 export const DbSchemaViewer = ({dbSchema}:{dbSchema:TableSchema[]}) => {
 
-    console.log(">> DbSchemaViewer", dbSchema);
+    // console.log(">> DbSchemaViewer", dbSchema);
     const [nodes, setNodes] = useNodesState(initializeStartingNodes(dbSchema));
 
     useEffect(()=>{

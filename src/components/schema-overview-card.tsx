@@ -2,19 +2,20 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { DbSchemaViewer } from "./db-schema-viewer";
 import { TableSchema } from "@/types";
 import { FancyMultiSelect } from "./fancy-multi-select";
-import { useState, useMemo, useCallback } from "react";
+import { useMemo } from "react";
+import { useDashboardStore } from "@/store/dashboardStore";
 
 
 export function SchemaOverviewCard({dbSchema}:{dbSchema:TableSchema[]}){
     console.log('>> render SchemaOverviewCard', dbSchema);
 
-    const selectedTableNames = useMemo(()=>dbSchema.map(it=>it.tableName),[dbSchema]);
-    const [displayedSchema, setDisplayedSchema] = useState(dbSchema);
-
-    const onOptionsChange = useCallback(( newOptions : string[] )=>{
-        setDisplayedSchema(dbSchema.filter(it=>newOptions.includes(it.tableName)))
-        console.log(">> onOptionsChange", dbSchema, newOptions);
-    },[setDisplayedSchema,dbSchema]);
+    const allTableNames = useMemo(()=>dbSchema.map(it=>it.tableName),[dbSchema]);
+    const selectedTableNames = useDashboardStore((state)=>state.selectedTableNames);
+    const displayedSchema = dbSchema.filter(it=>selectedTableNames.map(it=>it.value).includes(it.tableName))
+    // const onOptionSelected = useCallback(( newOptions : string[] )=>{
+    //     setDisplayedSchema(dbSchema.filter(it=>newOptions.includes(it.tableName)))
+    //     console.log(">> onOptionSelected", dbSchema, newOptions);
+    // },[setDisplayedSchema,dbSchema]);
 
     return   (
     <Card className="w-full">
@@ -23,7 +24,7 @@ export function SchemaOverviewCard({dbSchema}:{dbSchema:TableSchema[]}){
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-2">
-            <FancyMultiSelect options={selectedTableNames} onOptionsChange={onOptionsChange}></FancyMultiSelect>
+            <FancyMultiSelect options={allTableNames}></FancyMultiSelect>
             <div className="flex h-[500px] w-[100%]">
                 <DbSchemaViewer dbSchema={displayedSchema} ></DbSchemaViewer>
             </div>

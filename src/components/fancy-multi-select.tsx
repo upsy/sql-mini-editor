@@ -10,20 +10,24 @@ import {
 } from "@/components/ui/command";
 
 import { Command as CommandPrimitive } from "cmdk";
+import { useDashboardStore } from "@/store/dashboardStore";
 
 type Framework = Record<"value" | "label", string>;
 
 
-export function FancyMultiSelect({options, onOptionsChange}:{options:string[], onOptionsChange:(newOptions:string[])=>void}) {
+export function FancyMultiSelect({options}:{options:string[]}) {
   const FRAMEWORKS = React.useMemo( ()=>options.map(it=>({value:it,label:it})),[options]);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Framework[]>(FRAMEWORKS);
+//   const [selected, setSelected] = React.useState<Framework[]>(FRAMEWORKS);
+  const selected = useDashboardStore((state)=>state.selectedTableNames);
+  const setSelected = useDashboardStore((state)=>state.setSelectedTableNames);
+
   const [inputValue, setInputValue] = React.useState("");
 
   const handleUnselect = React.useCallback((framework: Framework) => {
     setSelected((prev) => prev.filter((s) => s.value !== framework.value));
-  }, []);
+  }, [setSelected]);
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -44,18 +48,16 @@ export function FancyMultiSelect({options, onOptionsChange}:{options:string[], o
         }
       }
     },
-    []
+    [setSelected]
   );
 
   const selectables = FRAMEWORKS.filter(
     (framework) => !selected.includes(framework)
   );
 
-  React.useEffect(()=>{
-    onOptionsChange(selected.map(it=>it.value));
-  },[selected,onOptionsChange]);
 
-  console.log(">> FancyMultiSelect",  selected);
+
+//   console.log(">> FancyMultiSelect",  selected);
 
   return (
     <Command
