@@ -31,7 +31,7 @@ function App() {
           defaultOptions: { queries: { refetchOnWindowFocus: false } },
         })
   );
-  
+
   return (
     <DashboardContext.Provider value={{bpmEngine:fakeBpmEngine, url:'fake_url'}}>
       <QueryClientProvider client={queryClient}>
@@ -63,6 +63,7 @@ function FullDashboard(){
 
   });
 
+  if (!fetchedSchema) return (<p>Loading schema...</p>);
   if (!allowedTables) return (<p>Loading schema...</p>);
 
   if (error) return (<p>{'Error loading schema '+error.toString()}</p>);
@@ -83,7 +84,7 @@ function FullDashboard(){
   </TabsContent>
   <TabsContent value="overview">
     <div className="flex p-2 w-full flex-col">
-      <SchemaOverviewCard/>
+      <SchemaOverviewCard dbSchema={fetchedSchema}/>
     </div>
   </TabsContent>
 </Tabs>)
