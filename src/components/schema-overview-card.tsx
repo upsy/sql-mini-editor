@@ -6,6 +6,8 @@ import { useState, useMemo, useCallback } from "react";
 
 
 export function SchemaOverviewCard({dbSchema}:{dbSchema:TableSchema[]}){
+    console.log('>> render SchemaOverviewCard', dbSchema);
+
     const selectedTableNames = useMemo(()=>dbSchema.map(it=>it.tableName),[dbSchema]);
     const [displayedSchema, setDisplayedSchema] = useState(dbSchema);
 

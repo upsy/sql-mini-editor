@@ -46,6 +46,7 @@ export default App
 
 
 function FullDashboard(){
+  console.log(">> render FullDashboard");
   const { data:fetchedSchema, error } = useDbSchema();
 
 
