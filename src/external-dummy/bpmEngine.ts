@@ -8,6 +8,10 @@ const dbSchema = JSON.stringify([{
     tableName:"users",
     columns:[{name: "id", type: "varchar2"},{name: "name", type: "varchar2"},{name: "created_d", type: "date"},{name: "email", type: "varchar2"}]
 
+},{
+    tableName:"orders",
+    columns:[{name: "id", type: "varchar2"},{name: "total", type: "number"},{name: "created_d", type: "date"},{name: "user_id", type: "varchar2"}]
+
 }]);
 
 export const bpmEngine:BPMEngine = {

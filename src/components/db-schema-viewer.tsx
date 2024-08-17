@@ -20,7 +20,7 @@ function initializeStartingNodes( dbSchema:TableSchema[] ){
             id: index+'',
             type: 'custom',
             data: it,
-            position: { x: 0, y: 50 },
+            position: { x: index*350, y: 0 },
           })
     });
 }

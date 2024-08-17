@@ -1,9 +1,10 @@
-9. schema overview (https://sqlhabit.github.io/sql_schema_visualizer/databases/nba) / (https://github.com/ayeressian/db-viewer-component) https://www.youtube.com/watch?v=05PBW_k2Nno, https://codesandbox.io/p/sandbox/young-https-37wwl4?file=%2FApp.js&utm_medium=sandpack, https://reactflow.dev/examples/styling/tailwind
-10. use Toast something to show server response ("Success / Fail")
-11. #display results with Tanstack Table/shadcn data-table -> need to update to dataTable
-12. #query/schema overview Tabs
-13. #fix {} any issues
-14. #use Zustand for stores
-15. #create hooks + Zustand to read data from stores + to generate updates in stores?
-16. #use React Query to fetch data (load historical QUERIES)+ mutation to functions that pass data to server ('ACTION' = 'RUN_QUERY', {query:''} => message)
-17. #force currentQuery update from Historic Card
+18. multiple tab select to only display selected tables!
+19. #schema overview (https://sqlhabit.github.io/sql_schema_visualizer/databases/nba) / (https://github.com/ayeressian/db-viewer-component) https://www.youtube.com/watch?v=05PBW_k2Nno, https://codesandbox.io/p/sandbox/young-https-37wwl4?file=%2FApp.js&utm_medium=sandpack, https://reactflow.dev/examples/styling/tailwind
+20. use Toast something to show server response ("Success / Fail")
+21. #display results with Tanstack Table/shadcn data-table -> need to update to dataTable
+22. #query/schema overview Tabs
+23. #fix {} any issues
+24. #use Zustand for stores
+25. #create hooks + Zustand to read data from stores + to generate updates in stores?
+26. #use React Query to fetch data (load historical QUERIES)+ mutation to functions that pass data to server ('ACTION' = 'RUN_QUERY', {query:''} => message)
+27. #force currentQuery update from Historic Card
