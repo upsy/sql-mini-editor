@@ -17,6 +17,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Database, DatabaseIcon, PenBoxIcon } from "lucide-react";
+import { SchemaOverviewCard } from "./components/schema-overview-card";
 
 
 function App() {
@@ -52,6 +53,11 @@ function App() {
                 <QueryHistoryCard/>
               </div>
                 <QueryResultsCard />
+            </div>
+          </TabsContent>
+          <TabsContent value="overview">
+            <div className="flex p-2 w-full flex-col">
+              <SchemaOverviewCard/>
             </div>
           </TabsContent>
         </Tabs>
