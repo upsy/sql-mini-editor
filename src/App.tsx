@@ -9,6 +9,16 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { DashboardContext } from "./contexts/DashboardContext";
 import { bpmEngine as fakeBpmEngine } from "./external-dummy/bpmEngine";
 
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import { Database, DatabaseIcon, PenBoxIcon } from "lucide-react";
+
+
 function App() {
 
 
@@ -30,14 +40,21 @@ function App() {
   return (
     <DashboardContext.Provider value={{bpmEngine:fakeBpmEngine, url:'fake_url'}}>
       <QueryClientProvider client={queryClient}>
-        
-        <div className="flex p-2 w-full flex-col">
-          <div className="flex flex-row gap-2 w-full">
-            <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
-            <QueryHistoryCard/>
-          </div>
-            <QueryResultsCard />
-        </div>
+        <Tabs defaultValue="sql-editor" className="w-full">
+          <TabsList className="grid w-[400px] grid-cols-2 m-2">
+            <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Editor</TabsTrigger>
+            <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
+          </TabsList>
+          <TabsContent value="sql-editor">
+            <div className="flex p-2 w-full flex-col">
+              <div className="flex flex-row gap-2 w-full">
+                <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
+                <QueryHistoryCard/>
+              </div>
+                <QueryResultsCard />
+            </div>
+          </TabsContent>
+        </Tabs>
       </QueryClientProvider>
     </DashboardContext.Provider>
   );
