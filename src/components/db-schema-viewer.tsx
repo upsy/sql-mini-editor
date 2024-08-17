@@ -42,7 +42,7 @@ export const DbSchemaViewer = ({dbSchema}:{dbSchema:TableSchema[]}) => {
         nodes={nodes}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-sky-50"
+        className="bg-mutted"
       >
         <MiniMap />
         <Controls />
