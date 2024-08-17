@@ -16,8 +16,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { Database, DatabaseIcon, PenBoxIcon } from "lucide-react";
+import { DatabaseIcon, PenBoxIcon } from "lucide-react";
 import { SchemaOverviewCard } from "./components/schema-overview-card";
+import { useDbSchema } from "./hooks/useDBSchema";
+// import { error } from "console";
 
 
 function App() {
@@ -29,41 +31,60 @@ function App() {
           defaultOptions: { queries: { refetchOnWindowFocus: false } },
         })
   );
-
-  const allowedTables = ['users', 'orders', 'products'];
-  const tableColumns = {
-    users: ['id', 'name', 'email'],
-    orders: ['id', 'user_id', 'total'],
-    products: ['id', 'name', 'price']
-  };
-
-
+  
   return (
     <DashboardContext.Provider value={{bpmEngine:fakeBpmEngine, url:'fake_url'}}>
       <QueryClientProvider client={queryClient}>
-        <Tabs defaultValue="sql-editor" className="w-full">
-          <TabsList className="grid w-[400px] grid-cols-2 m-2">
-            <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Editor</TabsTrigger>
-            <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
-          </TabsList>
-          <TabsContent value="sql-editor">
-            <div className="flex p-2 w-full flex-col">
-              <div className="flex flex-row gap-2 w-full">
-                <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
-                <QueryHistoryCard/>
-              </div>
-                <QueryResultsCard />
-            </div>
-          </TabsContent>
-          <TabsContent value="overview">
-            <div className="flex p-2 w-full flex-col">
-              <SchemaOverviewCard/>
-            </div>
-          </TabsContent>
-        </Tabs>
+        <FullDashboard/>
       </QueryClientProvider>
     </DashboardContext.Provider>
   );
 }
 
 export default App
+
+
+
+function FullDashboard(){
+  const { data:fetchedSchema, error } = useDbSchema();
+
+
+  const allowedTables = fetchedSchema?.map(it=>it.tableName);
+  const tableColumns: Record<string, string[]> = {};
+  fetchedSchema?.forEach( it => {
+    
+    if (!tableColumns[it.tableName]){
+      tableColumns[it.tableName] = [];
+    }
+    
+    it.columns.forEach(col=>{
+      tableColumns[it.tableName].push(col.name);
+    });
+
+  });
+
+  if (!allowedTables) return (<p>Loading schema...</p>);
+
+  if (error) return (<p>{'Error loading schema '+error.toString()}</p>);
+
+  return  (<Tabs defaultValue="sql-editor" className="w-full">
+  <TabsList className="grid w-[400px] grid-cols-2 m-2">
+    <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Editor</TabsTrigger>
+    <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
+  </TabsList>
+  <TabsContent value="sql-editor">
+    <div className="flex p-2 w-full flex-col">
+      <div className="flex flex-row gap-2 w-full">
+        <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
+        <QueryHistoryCard/>
+      </div>
+        <QueryResultsCard />
+    </div>
+  </TabsContent>
+  <TabsContent value="overview">
+    <div className="flex p-2 w-full flex-col">
+      <SchemaOverviewCard/>
+    </div>
+  </TabsContent>
+</Tabs>)
+}

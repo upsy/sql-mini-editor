@@ -24,9 +24,7 @@ import { Input } from "@/components/ui/input"
 
 
 interface QueryResultsTableProps {
-  data:  Record<string, string | number >[],
-  tanstackColumns: Array<{header: string, accesorKey: string}>
-}
+  data:  Record<string, string | number >[]}
 
 
 const columnHelper = createColumnHelper<Record<string, string | number >>()

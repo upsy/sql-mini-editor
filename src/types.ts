@@ -15,3 +15,8 @@ export type QueryHistoryItem = {
         created_d: string;
         user_id: string;
     }
+
+export type TableSchema = {
+        tableName: string;
+        columns: Array<{name:string, type:string}>
+}

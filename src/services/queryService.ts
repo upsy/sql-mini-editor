@@ -1,6 +1,6 @@
 // src/services/queryService.ts
 import { callBpmAjax } from '@/services/bpmService';
-import { BPMEngine } from '@/types';
+import { BPMEngine, TableSchema } from '@/types';
 import { QueryHistoryItem, ServerResponse } from '@/types';
 
 
@@ -48,6 +48,31 @@ export const fetchQueryHistoryService = (bpmEngine:BPMEngine, url:string):Promis
                 }
 
                 resolve(allQueries as QueryHistoryItem[]); 
+            }, 
+            (error)=>{ reject(error) } );
+  });
+};
+
+
+export const fetchDbSchemaService = (bpmEngine:BPMEngine, url:string):Promise<TableSchema[]> => {
+    const inputObj = {
+        "action": "FETCH_DB_SCHEMA",
+        "payload": ''
+    }
+    const inputJSON = JSON.stringify(inputObj);
+
+    return new Promise((resolve, reject) => {
+        callBpmAjax( bpmEngine, url, inputJSON ,(data) => { 
+                console.log(">> fetchDbSchemaService", data);
+
+                const serverResponse = data as ServerResponse;
+                const resultsObj = JSON.parse(serverResponse.resultJSON);
+                let dbSchema = [];
+                if (resultsObj && resultsObj.dbSchema){
+                    dbSchema = resultsObj.dbSchema
+                }
+
+                resolve(dbSchema as TableSchema[]); 
             }, 
             (error)=>{ reject(error) } );
   });
