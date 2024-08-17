@@ -18,7 +18,7 @@ export function QueryResultsCard(){
       {displayResults && displayResults[0] && <QueryResultsTable data={displayResults}></QueryResultsTable>}
     </CardContent>
     <CardFooter>
-    <DownloadCSVButton data={displayResults} filename="query_results.csv"></DownloadCSVButton>
+    {displayResults && displayResults[0] && <DownloadCSVButton data={displayResults} filename="query_results.csv"></DownloadCSVButton>}
     </CardFooter>
   </Card>);
 }

@@ -58,7 +58,10 @@ export const bpmEngine:BPMEngine = {
 
         setTimeout(()=>{
             console.log(">> serving ", serverData);
+            // if (inputObj.action == 'RUN_QUERY'){
+            //     args.error(new Error('Server failed!'));
+            // }
             args.load(serverData);
-        }, 500)
+        }, 1500)
     }
 }

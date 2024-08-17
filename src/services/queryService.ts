@@ -2,6 +2,7 @@
 import { callBpmAjax } from '@/services/bpmService';
 import { BPMEngine, TableSchema } from '@/types';
 import { QueryHistoryItem, ServerResponse } from '@/types';
+import { toast } from "sonner"
 
 
 
@@ -13,17 +14,29 @@ export const runQueryService = (bpmEngine:BPMEngine, url:string, newSqlQuery: st
 
     const inputJSON = JSON.stringify(inputObj);
 
-    return new Promise((resolve, reject) => {
+    const runQueryPromise :Promise<{queryResults:Array<unknown>, savedQuery:QueryHistoryItem}> = new Promise((resolve, reject) => {
         callBpmAjax( bpmEngine, url, inputJSON ,(data) => { 
                 console.log(">> runQueryService", data);
                 const serverResponse = data as ServerResponse;
                 const resultsObj = JSON.parse(serverResponse.resultJSON);
                 const savedQuery:QueryHistoryItem = resultsObj.savedQuery;
                 savedQuery.query = decodeURIComponent(savedQuery.query);
+
+                
                 resolve({queryResults:resultsObj.queryResults, savedQuery:savedQuery}); 
 
-            }, (error)=>{ reject(error) } );
+            }, (error)=>{ reject(error); toast.error(error.message) } );
     });
+
+    toast.promise(runQueryPromise, {
+        loading: 'Running SQL query on server...',
+        success: (data) => {
+          return `Success! ${data.queryResults.length} row(s) returned`;
+        },
+        error: 'Error when running the query!',
+      });
+
+    return runQueryPromise;
 };
 
 
@@ -61,7 +74,7 @@ export const fetchDbSchemaService = (bpmEngine:BPMEngine, url:string):Promise<Ta
     }
     const inputJSON = JSON.stringify(inputObj);
 
-    return new Promise((resolve, reject) => {
+    const fetchDbSchemaService:Promise<TableSchema[]> =  new Promise((resolve, reject) => {
         callBpmAjax( bpmEngine, url, inputJSON ,(data) => { 
                 console.log(">> fetchDbSchemaService", data);
 
@@ -76,4 +89,15 @@ export const fetchDbSchemaService = (bpmEngine:BPMEngine, url:string):Promise<Ta
             }, 
             (error)=>{ reject(error) } );
   });
+
+
+  toast.promise(fetchDbSchemaService, {
+    loading: 'Retrieving DB Schema configurations...',
+    success: () => {
+      return `Success! Dashboard Initialized!`;
+    },
+    error: 'Error!',
+  });
+
+  return fetchDbSchemaService;
 };

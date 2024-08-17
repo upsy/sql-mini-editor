@@ -16,6 +16,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+
+import { Toaster } from "@/components/ui/sonner"
+
 import { DatabaseIcon, PenBoxIcon } from "lucide-react";
 import { SchemaOverviewCard } from "./components/schema-overview-card";
 import { useDbSchema } from "./hooks/useDBSchema";
@@ -35,7 +38,10 @@ function App() {
   return (
     <DashboardContext.Provider value={{bpmEngine:fakeBpmEngine, url:'fake_url'}}>
       <QueryClientProvider client={queryClient}>
-        <FullDashboard/>
+        <div className="px-4 py-2 bg-zinc-50">
+          <FullDashboard/>
+        </div>
+        <Toaster></Toaster>
       </QueryClientProvider>
     </DashboardContext.Provider>
   );
