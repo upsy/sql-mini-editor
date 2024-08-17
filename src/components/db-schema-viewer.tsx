@@ -9,6 +9,7 @@ import '@xyflow/react/dist/base.css';
 import { TableSchema } from '@/types';
 
 import TableNode from '@/components/db-schema-table-node';
+import { useEffect } from 'react';
 
 const nodeTypes = {
   custom: TableNode,
@@ -26,7 +27,16 @@ function initializeStartingNodes( dbSchema:TableSchema[] ){
 }
 
 export const DbSchemaViewer = ({dbSchema}:{dbSchema:TableSchema[]}) => {
-    const [nodes] = useNodesState(initializeStartingNodes(dbSchema));
+
+    console.log(">> DbSchemaViewer", dbSchema);
+    const [nodes, setNodes] = useNodesState(initializeStartingNodes(dbSchema));
+
+    useEffect(()=>{
+        if (nodes.length != initializeStartingNodes(dbSchema).length){
+            setNodes(initializeStartingNodes(dbSchema))
+        }
+    },[dbSchema,setNodes,nodes.length]);
+
     return (
       <ReactFlow
         nodes={nodes}
