@@ -1,12 +1,13 @@
 // src/components/DynamicDataTable.tsx
-import React, {useMemo} from 'react'
+import React, {useMemo, useState} from 'react'
 import {
     // ColumnDef
     createColumnHelper,
     flexRender,
     getCoreRowModel,
     useReactTable,
-    getPaginationRowModel
+    getPaginationRowModel,
+    getFilteredRowModel
   } from "@tanstack/react-table"
   
 import {
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 
 interface QueryResultsTableProps {
@@ -30,8 +32,8 @@ interface QueryResultsTableProps {
 const columnHelper = createColumnHelper<Record<string, string | number >>()
 
 export const QueryResultsTable: React.FC<QueryResultsTableProps> = ({ data }) => {
+    const [filter, setFilter] = useState('');
     const columns = Object.keys(data[0]);
-    
     // const tanstackColumns = useMemo( ()=>columns.map(it=>({
     //     header: it +'', 
     //     accesorKey: it+'',
@@ -45,7 +47,12 @@ export const QueryResultsTable: React.FC<QueryResultsTableProps> = ({ data }) =>
         data,
         columns: tanstackColumns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel()
+        getPaginationRowModel: getPaginationRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        state:{
+          globalFilter: filter
+        },
+        // onGlobalFilterChange:
       })
     
     
@@ -54,6 +61,16 @@ export const QueryResultsTable: React.FC<QueryResultsTableProps> = ({ data }) =>
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter data..."
+          value={filter}
+          onChange={(event) =>
+            setFilter(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
     <div className="rounded-md border">
       <Table>
         <TableHeader>
@@ -97,6 +114,9 @@ export const QueryResultsTable: React.FC<QueryResultsTableProps> = ({ data }) =>
           )}
         </TableBody>
       </Table>
+    </div>
+    <div className="flex-1 text-sm text-muted-foreground">
+      {table.getFilteredRowModel().rows.length} row(s) returned. Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
     </div>
     <div className="flex items-center justify-end space-x-2 py-4">
         <Button

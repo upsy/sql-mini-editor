@@ -25,7 +25,6 @@ export function SQLMiniEditorCard({allowedTables, tableColumns} : SQLEditorProps
       </CardHeader>
       <CardContent>
         <SQLMiniEditorTextarea currentQuery={currentQuery} allowedTables={allowedTables} tableColumns={tableColumns} onQueryChange={handleQueryChange}/>
-        {currentQuery}
       </CardContent>
       <CardFooter>
         <Button onClick={() => runQuery(currentQuery)} disabled={isPending}><Play className='w-4 h-4 mr-2'></Play> {isPending ? 'Running...' : 'Run Query'}</Button>
