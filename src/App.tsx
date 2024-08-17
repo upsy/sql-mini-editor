@@ -70,14 +70,14 @@ function FullDashboard(){
 
   });
 
-  if (!fetchedSchema) return (<p>Loading schema...</p>);
+  if (!fetchedSchema) return (<p>Loading SQL Execution Dashboard...</p>);
   if (!allowedTables) return (<p>Loading schema...</p>);
 
   if (error) return (<p>{'Error loading schema '+error.toString()}</p>);
 
   return  (<Tabs defaultValue="sql-editor" className="w-full">
   <TabsList className="grid w-[400px] grid-cols-2 m-2">
-    <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Editor</TabsTrigger>
+    <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Execution</TabsTrigger>
     <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
   </TabsList>
   <TabsContent value="sql-editor">

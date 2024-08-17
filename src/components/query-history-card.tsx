@@ -47,7 +47,7 @@ export function QueryHistoryCard(){
 
 function QueryHistoryDetails( {queryItem}:{queryItem: QueryHistoryItem} ){
   return (
-  <div className="flex items-center gap-4 p-4 border-b hover:bg-sky-50">
+  <div className="flex items-center gap-4 p-4 border-b hover:bg-muted">
     <Avatar className="hidden h-9 w-9 sm:flex">
       {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn"></AvatarImage> */}
       <AvatarFallback>{queryItem.user_id.toLocaleUpperCase().slice(0,2)}</AvatarFallback>

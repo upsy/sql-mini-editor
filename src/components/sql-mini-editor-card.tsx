@@ -4,6 +4,7 @@ import SQLMiniEditorTextarea from "./sql-mini-editor-textarea";
 import { Play } from 'lucide-react';
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useRunQuery } from "@/hooks/useRunQuery";
+import { useCallback } from "react";
 
 interface SQLEditorProps {
   allowedTables: string[];
@@ -14,9 +15,9 @@ export function SQLMiniEditorCard({allowedTables, tableColumns} : SQLEditorProps
   const { currentQuery, setCurrentQuery } = useDashboardStore();
   const { mutate: runQuery, isPending }  = useRunQuery();
 
-  const handleQueryChange = (newQuery:string) => {
+  const handleQueryChange = useCallback((newQuery:string) => {
     setCurrentQuery(newQuery);
-  };
+  },[setCurrentQuery]);
 
     return   (
     <Card className="w-2/3">
