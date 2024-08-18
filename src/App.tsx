@@ -7,7 +7,6 @@ import { useState } from "react";
 import { QueryClient } from "@tanstack/query-core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { DashboardContext } from "./contexts/DashboardContext";
-import { bpmEngine as fakeBpmEngine } from "./external-dummy/bpmEngine";
 
 
 import {
@@ -22,24 +21,41 @@ import { Toaster } from "@/components/ui/sonner"
 import { DatabaseIcon, PenBoxIcon } from "lucide-react";
 import { SchemaOverviewCard } from "./components/schema-overview-card";
 import { useDbSchema } from "./hooks/useDBSchema";
+import { BPMEngine } from "./types";
 // import { error } from "console";
+import React, { } from 'react';
+import { createRoot } from 'react-dom/client';
+import { useDashboardStore } from "./store/dashboardStore";
 
 
-function App() {
+declare global {
+  interface Window {
+    react_sqlDashboard: any;
+  }
+}
+
+window.react_sqlDashboard = {
+  SQLDashboard,
+  React,
+  createRoot,
+  zustand_useStore: useDashboardStore
+};
+
+function SQLDashboard({ bpmEngine, url }: { bpmEngine: BPMEngine, url: string }) {
 
 
   const [queryClient] = useState(
     () =>
-        new QueryClient({
-          defaultOptions: { queries: { refetchOnWindowFocus: false } },
-        })
+      new QueryClient({
+        defaultOptions: { queries: { refetchOnWindowFocus: false } },
+      })
   );
 
   return (
-    <DashboardContext.Provider value={{bpmEngine:fakeBpmEngine, url:'fake_url'}}>
+    <DashboardContext.Provider value={{ bpmEngine: bpmEngine, url: url }}>
       <QueryClientProvider client={queryClient}>
         <div className="px-4 py-2 bg-zinc-50">
-          <FullDashboard/>
+          <FullDashboard />
         </div>
         <Toaster></Toaster>
       </QueryClientProvider>
@@ -47,24 +63,23 @@ function App() {
   );
 }
 
-export default App
+export default SQLDashboard;
 
 
-
-function FullDashboard(){
+function FullDashboard() {
   console.log(">> render FullDashboard");
-  const { data:fetchedSchema, error } = useDbSchema();
+  const { data: fetchedSchema, error } = useDbSchema();
 
 
-  const allowedTables = fetchedSchema?.map(it=>it.tableName);
+  const allowedTables = fetchedSchema?.map(it => it.tableName);
   const tableColumns: Record<string, string[]> = {};
-  fetchedSchema?.forEach( it => {
-    
-    if (!tableColumns[it.tableName]){
+  fetchedSchema?.forEach(it => {
+
+    if (!tableColumns[it.tableName]) {
       tableColumns[it.tableName] = [];
     }
-    
-    it.columns.forEach(col=>{
+
+    it.columns.forEach(col => {
       tableColumns[it.tableName].push(col.name);
     });
 
@@ -73,26 +88,26 @@ function FullDashboard(){
   if (!fetchedSchema) return (<p>Loading SQL Execution Dashboard...</p>);
   if (!allowedTables) return (<p>Loading schema...</p>);
 
-  if (error) return (<p>{'Error loading schema '+error.toString()}</p>);
+  if (error) return (<p>{'Error loading schema ' + error.toString()}</p>);
 
-  return  (<Tabs defaultValue="sql-editor" className="w-full">
-  <TabsList className="grid w-[400px] grid-cols-2 m-2">
-    <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Execution</TabsTrigger>
-    <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
-  </TabsList>
-  <TabsContent value="sql-editor">
-    <div className="flex p-2 w-full flex-col">
-      <div className="flex flex-row gap-2 w-full">
-        <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns}/>
-        <QueryHistoryCard/>
-      </div>
+  return (<Tabs defaultValue="sql-editor" className="w-full">
+    <TabsList className="grid w-[400px] grid-cols-2 m-2">
+      <TabsTrigger value="sql-editor"><PenBoxIcon className="w-4 h-4 mr-2"></PenBoxIcon>SQL Execution</TabsTrigger>
+      <TabsTrigger value="overview"><DatabaseIcon className="w-4 h-4 mr-2" />Schema Overview</TabsTrigger>
+    </TabsList>
+    <TabsContent value="sql-editor">
+      <div className="flex p-2 w-full flex-col">
+        <div className="flex flex-row gap-2 w-full">
+          <SQLMiniEditorCard allowedTables={allowedTables} tableColumns={tableColumns} />
+          <QueryHistoryCard />
+        </div>
         <QueryResultsCard />
-    </div>
-  </TabsContent>
-  <TabsContent value="overview">
-    <div className="flex p-2 w-full flex-col">
-      <SchemaOverviewCard dbSchema={fetchedSchema}/>
-    </div>
-  </TabsContent>
-</Tabs>)
+      </div>
+    </TabsContent>
+    <TabsContent value="overview">
+      <div className="flex p-2 w-full flex-col">
+        <SchemaOverviewCard dbSchema={fetchedSchema} />
+      </div>
+    </TabsContent>
+  </Tabs>)
 }

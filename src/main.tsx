@@ -1,10 +1,17 @@
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import { bpmEngine as fakeBpmEngine } from "./external-dummy/bpmEngine";
+
+import SQLDashboard from './App';
 import './index.css';
 
+// createRoot(document.getElementById('root')!).render(
+// <StrictMode>
+//   <SQLDashboard bpmEngine={fakeBpmEngine} url={'fake_url'} />
+// </StrictMode>,
+// )
+
+
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  React.createElement(SQLDashboard, { bpmEngine: fakeBpmEngine, url: 'fake_url' })
 )

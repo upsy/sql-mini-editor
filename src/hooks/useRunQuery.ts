@@ -13,20 +13,20 @@ export const useRunQuery = () => {
 
   return useMutation({
     mutationFn: (query: string) => runQueryService(bpmEngine, url, query),
-    onMutate: ()=>{
+    onMutate: () => {
       setQueryResults([]);
     },
     onSuccess: (data, variables) => {
-      
 
-      console.log('>> run query ednded', data, variables);
+
+      // console.log('>> run query ended', data, variables);
 
 
       setQueryResults(data.queryResults);
       // queryClient.setQueryData(['queryResults'], data.queryResults);
       // addToQueryHistory({query:variables, created_d:'2024-08-14', user_id:'@you'});
       setCurrentQuery(variables);  // Update current query in store
-      queryClient.setQueryData(['queryHistory'],(oldData:Array<QueryHistoryItem>)=>[data.savedQuery, ...oldData]);
+      queryClient.setQueryData(['queryHistory'], (oldData: Array<QueryHistoryItem>) => [data.savedQuery, ...oldData]);
     },
     onError: (error) => {
       console.error('Query failed:', error);
