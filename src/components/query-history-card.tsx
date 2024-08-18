@@ -6,6 +6,18 @@ import {
   Avatar,
   AvatarFallback,
 } from "@/components/ui/avatar"
+import { Skeleton } from "./ui/skeleton";
+
+
+function QueryHistoryDetailsSkeleton(){
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="w-full h-[71px]"/>
+      <Skeleton className="w-full h-[71px]"/>
+      <Skeleton className="w-full h-[71px]"/>
+    </div>
+  )
+}
 
 
 export function QueryHistoryCard() {
@@ -28,7 +40,7 @@ export function QueryHistoryCard() {
         <CardTitle>Saved History</CardTitle>
       </CardHeader>
       <CardContent>
-        {isLoading && <div>Loading query history...</div>}
+        {isLoading && <QueryHistoryDetailsSkeleton/>}
         {error && <div>Error loading query history: {error.message}</div>}
         {!isLoading && !error && fetchedHistory && (<ul className="max-h-60	overflow-y-scroll">
           {fetchedHistory.map((it, index) => (
@@ -62,6 +74,8 @@ function QueryHistoryDetails({ queryItem }: { queryItem: QueryHistoryItem }) {
       </div>
       <div className="ml-auto font-medium">{queryItem.created_d}</div>
     </div>)
+
+
 
 
   // <div className="p-5 mb-2 border ">

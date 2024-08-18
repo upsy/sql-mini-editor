@@ -27,6 +27,7 @@ import React, { } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useDashboardStore } from "./store/dashboardStore";
 import { bpmEngine as fakeBpmEngine } from "./external-dummy/bpmEngine";
+import { Skeleton } from "./components/ui/skeleton";
 
 
 declare global {
@@ -87,8 +88,8 @@ function FullDashboard() {
 
   });
 
-  if (!fetchedSchema) return (<p>Loading SQL Execution Dashboard...</p>);
-  if (!allowedTables) return (<p>Loading schema...</p>);
+  if (!fetchedSchema) return (<FullDashboardSkeleton/>);
+  if (!allowedTables) return (<p>Error.. failed to load allowed tables from server!</p>);
 
   if (error) return (<p>{'Error loading schema ' + error.toString()}</p>);
 
@@ -112,4 +113,20 @@ function FullDashboard() {
       </div>
     </TabsContent>
   </Tabs>)
+}
+
+
+function FullDashboardSkeleton() {
+  return (
+    <div className="flex flex-col">
+      <Skeleton className="h-[40px] w-[400px] rounded-md m-2 bg-zinc-200" />
+      <div className="flex p-2 w-full flex-col gap-2">
+        <div className="flex flex-row gap-2 w-full">
+          <Skeleton className="w-2/3 h-[380px] bg-zinc-200"/>
+          <Skeleton className="w-1/3 h-[380px] bg-zinc-200"/>
+        </div>
+        <Skeleton className="w-full h-[146px] bg-zinc-200" />
+      </div>
+    </div>
+  )
 }

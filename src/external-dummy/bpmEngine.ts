@@ -62,6 +62,6 @@ export const bpmEngine:BPMEngine = {
             //     args.error(new Error('Server failed!'));
             // }
             args.load(serverData);
-        }, 1500)
+        }, 2500)
     }
 }
