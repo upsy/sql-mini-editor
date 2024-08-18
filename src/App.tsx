@@ -26,6 +26,7 @@ import { BPMEngine } from "./types";
 import React, { } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useDashboardStore } from "./store/dashboardStore";
+import { bpmEngine as fakeBpmEngine } from "./external-dummy/bpmEngine";
 
 
 declare global {
@@ -38,6 +39,7 @@ window.react_sqlDashboard = {
   SQLDashboard,
   React,
   createRoot,
+  fakeBpmEngine,
   zustand_useStore: useDashboardStore
 };
 
