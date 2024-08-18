@@ -3,7 +3,6 @@ import {
   useNodesState,
   MiniMap,
   Controls,
-  useNodesInitialized,
   ReactFlowInstance,
 } from '@xyflow/react';
 
