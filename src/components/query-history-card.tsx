@@ -42,7 +42,7 @@ export function QueryHistoryCard() {
       <CardContent>
         {isLoading && <QueryHistoryDetailsSkeleton/>}
         {error && <div>Error loading query history: {error.message}</div>}
-        {!isLoading && !error && fetchedHistory && (<ul className="max-h-60	overflow-y-scroll">
+        {!isLoading && !error && fetchedHistory && (<ul className="max-h-72	overflow-y-scroll">
           {fetchedHistory.map((it, index) => (
             <li key={index} onClick={() => handleQuerySelect(it.query)}>
               <QueryHistoryDetails queryItem={it} />

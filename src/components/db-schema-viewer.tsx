@@ -22,7 +22,7 @@ function initializeStartingNodes(dbSchema: TableSchema[]) {
       id: index + '',
       type: 'custom',
       data: it,
-      position: { x: index * 350, y: 0 },
+      position: { x: index * 405, y: 0 },
     })
   });
 }

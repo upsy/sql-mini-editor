@@ -24,6 +24,7 @@ interface ASTNode {
 
 const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowedTables, tableColumns, onQueryChange }) => {
   const [error, setError] = useState('');
+  const [queryTables, setQueryTables] = useState<{ [alias: string]: string }>({});
   const parser = new Parser();
 
 
@@ -82,6 +83,7 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
       }
 
       onQueryChange(value);
+      setQueryTables(getTablesFromQuery(ast));
       setError('');
     } catch (err) {
         if (err instanceof Error && err?.name == "SyntaxError"){
@@ -125,31 +127,43 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
   };
 
   const myCompletions = (context: CompletionContext): CompletionResult | null => {
-    const before = context.matchBefore(/\w+$/);
-    const word = before?.text.toLowerCase() || '';
-    
-    // debugger;
+    // const beforeDot = context.matchBefore(/(\w+)\.\w*$/);
+    const beforeDot = context.matchBefore(/(\w+)\.(\w*)$/);
 
-
-    let tables: { [alias: string]: string } = {};
+    const beforeWord = context.matchBefore(/\w+$/);
+    const word = beforeWord?.text.toLowerCase() || '';
+  
+    const tables = queryTables;
     const columnCompletions: Completion[] = [];
-
+    let isSelectContext = false;
+    let multipleTablesUsed = false;
+    
     // Try to parse the query
     try {
-      const ast = parser.astify(context.state.doc.toString());
-      tables = getTablesFromQuery(ast);
-
+      // const ast = parser.astify(context.state.doc.toString());
+      // tables = getTablesFromQuery(ast);
+  
+      // Check if we're in a SELECT context
+      const cursorPos = context.pos;
+      const docText = context.state.doc.toString();
+      const selectIndex = docText.toLowerCase().lastIndexOf('select', cursorPos);
+      const fromIndex = docText.toLowerCase().indexOf('from', selectIndex);
+      isSelectContext = selectIndex !== -1 && (fromIndex === -1 || cursorPos < fromIndex);
+  
+      // Check if multiple tables are used
+      multipleTablesUsed = Object.keys(tables).length > 1;
       // Generate column completions based on tables in the query
       Object.entries(tables).forEach(([alias, tableName]) => {
         if (tableColumns[tableName]) {
           columnCompletions.push(...tableColumns[tableName].map(column => ({
-            label: `${alias}.${column}`,
+            // label: isSelectContext ? column : `${alias}.${column}`,
+            label: (isSelectContext && multipleTablesUsed) ? `${alias}.${column}` : isSelectContext ? column : `${alias}.${column}`,
             type: 'property'
           })));
         }
       });
-    } catch ( err ) {
-      console.log(">> ignored err",err);
+    } catch (err) {
+      console.log(">> ignored err", err);
       // If parsing fails, fall back to suggesting all columns from all allowed tables
       allowedTables.forEach(table => {
         if (tableColumns[table]) {
@@ -160,29 +174,73 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
         }
       });
     }
+  
+    // Handle dot notation for table/alias
+    // if (beforeDot) {
+    //   const [, tableName] = beforeDot.text.split('.');
+    //   const actualTable = tables[tableName] || tableName;
+    //   if (tableColumns[actualTable]) {
+    //     return {
+    //       from: beforeDot.to,
+    //       options: tableColumns[actualTable].map(column => ({
+    //         label: column,
+    //         type: 'property'
+    //       })),
+    //       validFor: /^\w*$/
+    //     };
+    //   }
+    //   return null;
+    // }
 
+    if (beforeDot) {
+      const [tableName, partial] = beforeDot.text.split('.');
+      // debugger;
+      const actualTable = tables[tableName] || tableName;
+      if (tableColumns[actualTable]) {
+        return {
+          from: beforeDot.from + tableName.length + 1,
+          options: tableColumns[actualTable]
+            .filter(column => column.toLowerCase().startsWith(partial.toLowerCase()))
+            .map(column => ({
+              label: column,
+              type: 'property'
+            })),
+          validFor: /^\w*$/
+        };
+      }
+    }
+  
     // Suggest SQL keywords
     const keywordCompletions = sqlKeywords
       .filter(kw => kw.toLowerCase().startsWith(word))
       .map(kw => ({ label: kw, type: 'keyword' }));
-
+  
     // Suggest table names
     const tableCompletions = allowedTables
       .filter(table => table.toLowerCase().startsWith(word))
       .map(table => ({ label: table, type: 'type' }));
-
-    // Combine all completions
-    const allCompletions = [...keywordCompletions, ...tableCompletions, ...columnCompletions]
-      .filter(completion => completion.label.toLowerCase().startsWith(word));
-
+  
+    // Determine which completions to show based on context
+    let allCompletions: Completion[];
+    if (isSelectContext) {
+      allCompletions = columnCompletions;
+    } else {
+      allCompletions = [...tableCompletions, ...columnCompletions, ...keywordCompletions];
+    }
+  
+    // Filter completions based on the current word
+    allCompletions = allCompletions.filter(completion => 
+      completion.label.toLowerCase().startsWith(word)
+    );
+  
     if (allCompletions.length > 0) {
       return {
-        from: before ? before.from : context.pos,
+        from: beforeWord ? beforeWord.from : context.pos,
         options: allCompletions,
         validFor: /^\w*$/
       };
     }
-
+  
     return null;
   };
 
@@ -194,8 +252,9 @@ const SQLMiniEditorTextarea: React.FC<SQLEditorProps> = ({ currentQuery, allowed
         height="200px"
         extensions={[
             sql(),
-            autocompletion({ override: [myCompletions] })
+            autocompletion({ override: [myCompletions] , closeOnBlur:false})
         ]}
+       
         theme={githubLight}
         onChange={(value) => validateQuery(value)}
         />
