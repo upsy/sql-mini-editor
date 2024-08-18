@@ -32,7 +32,7 @@ import { Skeleton } from "./components/ui/skeleton";
 
 declare global {
   interface Window {
-    react_sqlDashboard: any;
+    react_sqlDashboard: object;
   }
 }
 
@@ -70,7 +70,7 @@ export default SQLDashboard;
 
 
 function FullDashboard() {
-  console.log(">> render FullDashboard");
+  // console.log(">> render FullDashboard");
   const { data: fetchedSchema, error } = useDbSchema();
 
 
