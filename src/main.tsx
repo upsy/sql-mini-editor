@@ -18,6 +18,6 @@ console.log("SQLDashboard", SQLDashboard, fakeBpmEngine);
 //   React.createElement(SQLDashboard, { bpmEngine: fakeBpmEngine, url: 'fake_url' })
 // )
 
-react_sqlDashboard.createRoot(document.getElementById('root')).render(
-  react_sqlDashboard.React.createElement(react_sqlDashboard.SQLDashboard, { bpmEngine: react_sqlDashboard.fakeBpmEngine, url: 'fake_url' })
-)
+// react_sqlDashboard.createRoot(document.getElementById('root')).render(
+//   react_sqlDashboard.React.createElement(react_sqlDashboard.SQLDashboard, { bpmEngine: react_sqlDashboard.fakeBpmEngine, url: 'fake_url' })
+// )

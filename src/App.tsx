@@ -57,10 +57,10 @@ function SQLDashboard({ bpmEngine, url }: { bpmEngine: BPMEngine, url: string })
   return (
     <DashboardContext.Provider value={{ bpmEngine: bpmEngine, url: url }}>
       <QueryClientProvider client={queryClient}>
+        <Toaster></Toaster>
         <div className="px-4 py-2 bg-zinc-50 min-h-screen">
           <FullDashboard />
         </div>
-        <Toaster></Toaster>
       </QueryClientProvider>
     </DashboardContext.Provider>
   );
